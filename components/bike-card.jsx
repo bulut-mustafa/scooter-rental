@@ -1,5 +1,8 @@
 import Image from "next/image";
-export default function BikeCard() {
+import { getPriceList } from "@/lib/actions";
+import Link from "next/link";
+export default async function BikeCard({ scooter }) {
+  const priceList = await getPriceList(scooter.id);
   return (
     <div className="shadow-md flex m-4 rounded-lg overflow-hidden">
       <div className="p-4">
@@ -11,38 +14,33 @@ export default function BikeCard() {
         />
       </div>
       <div className="p-4 flex flex-col">
-        <p className="text-xl font-semibold">Honda Vario 125CC</p>
-        <p className="text-sm text-gray-500">Full Automatic</p>
+        <Link href={`/${scooter.id}`}>
+          <p className="text-xl font-semibold">
+            {scooter.brand + " " + scooter.model + " " + scooter.power}
+          </p>
+        </Link>
         <div className="flex justify-between gap-6 items-center mt-4">
           <div>
             <p className="text-md">Weekday</p>
-            <div className="flex justify-between gap-2">
-              <p className="text-xs font-semibold">3-5 Hours</p>
-              <p className="text-xs text-gray-500">30RM</p>
-            </div>
-            <div className="flex justify-between gap-2">
-              <p className="text-xs font-semibold">5-8 Hours</p>
-              <p className="text-xs text-gray-500">30RM</p>
-            </div>
-            <div className="flex justify-between gap-2">
-              <p className="text-xs font-semibold">24 Hours</p>
-              <p className="text-xs text-gray-500">100RM</p>
-            </div>
+            {priceList
+              .filter((price) => price.type === "Weekday")
+              .map((price) => (
+                <div key={price.id} className="flex justify-between gap-2">
+                  <p className="text-xs font-semibold">{price.duration}</p>
+                  <p className="text-xs text-gray-500">{price.price}</p>
+                </div>
+              ))}
           </div>
           <div>
             <p className="text-md">Weekend</p>
-            <div className="flex justify-between gap-2">
-              <p className="text-xs font-semibold">3-5 Hours</p>
-              <p className="text-xs text-gray-500">30RM</p>
-            </div>
-            <div className="flex justify-between gap-2">
-              <p className="text-xs font-semibold">5-8 Hours</p>
-              <p className="text-xs text-gray-500">30RM</p>
-            </div>
-            <div className="flex justify-between gap-2">
-              <p className="text-xs font-semibold">24 Hours</p>
-              <p className="text-xs text-gray-500">100RM</p>
-            </div>
+            {priceList
+              .filter((price) => price.type === "Weekend")
+              .map((price) => (
+                <div key={price.id} className="flex justify-between gap-2">
+                  <p className="text-xs font-semibold">{price.duration}</p>
+                  <p className="text-xs text-gray-500">{price.price}</p>
+                </div>
+              ))}
           </div>
         </div>
       </div>
