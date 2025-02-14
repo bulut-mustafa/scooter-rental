@@ -6,6 +6,7 @@ export default async function Home() {
   
   return (
     <div>
+      <h1 className="text-4xl font-bold text-center mt-8">Bike Rental</h1>
       {allScooters.map((scooter) => (
         <BikeCard key={scooter.id} scooter={scooter}></BikeCard>
       ))}
